@@ -1,0 +1,157 @@
+:root {
+  color-scheme: dark;
+  --bg: #0d1117;
+  --panel: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --accent: #58a6ff;
+  --danger: #f85149;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.app {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  height: 100vh;
+  overflow: hidden;
+  grid-template-rows: auto minmax(260px, 1fr) minmax(180px, 1fr) minmax(110px, 0.5fr) auto;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.meta-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.panel {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 10px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panel h2 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 15px;
+  color: var(--accent);
+}
+
+.screenshot-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#screenshotImage {
+  width: 100%;
+  min-height: 200px;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #010409;
+}
+
+.meta-text {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.api-grid {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+pre {
+  margin: 0;
+  height: calc(100% - 24px);
+  overflow: auto;
+  background: #010409;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+#logValue {
+  height: calc(100% - 24px);
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+button {
+  border: 1px solid var(--border);
+  background: #21262d;
+  color: var(--text);
+  border-radius: 8px;
+  min-width: 140px;
+  min-height: 42px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+button:hover:enabled {
+  border-color: var(--accent);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+button#doneButton {
+  border-color: #8957e5;
+}
+
+button#doneButton:disabled {
+  border-color: var(--danger);
+}
