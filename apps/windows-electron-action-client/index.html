@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Action Task Client</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <h1>Action Task Client (Windows Electron)</h1>
+        <div class="meta-row">
+          <span>Step: <strong id="stepValue">1</strong></span>
+          <span>Selected Action: <strong id="actionValue">none</strong></span>
+          <span>Status: <strong id="statusValue">loading...</strong></span>
+        </div>
+      </header>
+
+      <section class="panel screenshot-panel" id="screenshotPanel">
+        <h2>Current Screen (Right-click to create action menu)</h2>
+        <img
+          id="screenshotImage"
+          alt="Current screen screenshot"
+          draggable="false"
+        />
+        <p id="screenshotMeta" class="meta-text">not captured</p>
+      </section>
+
+      <section class="api-grid">
+        <article class="panel">
+          <h2>API Request Message</h2>
+          <pre id="apiRequestMessage">{}</pre>
+        </article>
+        <article class="panel">
+          <h2>API Response Message</h2>
+          <pre id="apiResponseMessage">{}</pre>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>Client Log</h2>
+        <pre id="logValue"></pre>
+      </section>
+
+      <footer class="controls">
+        <button id="checkButton" type="button" disabled>Check</button>
+        <button id="nextButton" type="button" disabled>Next</button>
+        <button id="doneButton" type="button">Done</button>
+      </footer>
+    </main>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>

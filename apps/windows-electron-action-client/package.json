@@ -1,0 +1,19 @@
+{
+  "name": "windows-electron-action-client",
+  "version": "1.0.0",
+  "description": "Windows Electron task client with screenshot and action API flow",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "start:mock-api": "node mock-api.mjs",
+    "check": "node --check main.cjs && node --check preload.cjs && node --check renderer.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^40.6.0",
+    "express": "^5.2.1",
+    "screenshot-desktop": "^1.15.3"
+  }
+}
