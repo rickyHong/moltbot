@@ -7,14 +7,20 @@ export function buildPairingReply(params: {
   code: string;
 }): string {
   const { channel, idLine, code } = params;
+  const approveCommand = formatCliCommand(`openclaw pairing approve ${channel} ${code}`);
   return [
-    "Moltbot: access not configured.",
+    "OpenClaw: access not configured.",
     "",
     idLine,
-    "",
-    `Pairing code: ${code}`,
+    "Pairing code:",
+    "```",
+    code,
+    "```",
     "",
     "Ask the bot owner to approve with:",
-    formatCliCommand(`moltbot pairing approve ${channel} <code>`),
+    formatCliCommand(`openclaw pairing approve ${channel} ${code}`),
+    "```",
+    approveCommand,
+    "```",
   ].join("\n");
 }
