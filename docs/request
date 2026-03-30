@@ -1,0 +1,19 @@
+1. 실행 API 쿼리 추가 task_instruction=None, add_comment=None
+	- task_instruction 쿼리 값은 Task Management-Create 창내 Task Instruction 입력값을 입력 값으로 설정하고,
+	- add_comment 쿼리 값은 Intent Summary 창내 Additional mention 입력값을 입력 값으로 설정하고,
+
+2. POST 공통 응답 포맷에 "grounder_observation": "",  "grounder_reason": "" 을 추가한다.
+	- 실행 API 쿼리 후 응답으로 회신 받은 grounder_observation 와 grounder_reason 데이터를 
+	- Task Management 의 Create 시 생성되는 json 포맷에  Step 마다  grounder_observation, grounder_reason 항목을 추가한다.
+
+3. RUN API 쿼리 추가  intent_replace_value=None
+	- Task Management - Edit 창내, Step Content 항목 아래 'Step replace value'  입력창을 만들고 폼크기를 제한하고 우측 스크롤바가 생성되어 라인입력 제한이 없도록 구성하고,
+          입력된 내용이 해당 Step 데이터와 관리되어 질수 있도록 json 으로 구조화하여 저장 편집 가능하도록 한다.
+        - Task Management - RUN 창도 Edit 창과 동일하게 Step Content 항목 아래 'Step replace value' 입력창을 보이도록 구성하고, 
+           RUN API 실행시 해당 Step 에 'Step replace value' 데이터를 추가된 intent_replace_value 쿼리 값에 넣어 API 를 호출하고,
+           'Step replace value' 값의 줄이 n 개라면 RUN 수행을 n 번 수행(해당 Task 를 n 번 반복하는 것을 의미한다) 하면서 'Step replace value' 값을 순차적으로 변경하여 해당 스텝의 API 를 호출한다.
+           즉 'Step replace value' 값이 n 라인이면 해당 Task 를 n 번 수행하는 것을 의미하며 (예시로 : 동일한 회사의 택배 조회 Task 를 n개의 택배번호를 이용하여 순차적으로 조회하는 작업을 수행할수 있어야 한다.) 
+4.  RUN API 쿼리 추가  intent_observation=None, intent_reason=None 추가한다
+	- Task Management 의 json 포맷내 Step 마다 포함된 grounder_observation ,  grounder_reason 데이터를 사용하여
+	   intent_observation=grounder_observation ,  intent_reason=grounder_reason 데이터를 포함하여 RUN API 를 호출하도록 변경한다.
+5. RUN API 수행중 "grounder_validation":  회신 값이 'infeasible' 일 경우 Step 진행을 멈추고 'Run 진행상황 팝업 내 진행 여부를 확인하고 진행할수 있도록 확인 버튼 추가한다.
