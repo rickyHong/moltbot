@@ -17,3 +17,59 @@
 	- Task Management 의 json 포맷내 Step 마다 포함된 grounder_observation ,  grounder_reason 데이터를 사용하여
 	   intent_observation=grounder_observation ,  intent_reason=grounder_reason 데이터를 포함하여 RUN API 를 호출하도록 변경한다.
 5. RUN API 수행중 "grounder_validation":  회신 값이 'infeasible' 일 경우 Step 진행을 멈추고 'Run 진행상황 팝업 내 진행 여부를 확인하고 진행할수 있도록 확인 버튼 추가한다.
+
+
+
+아키텍처 관점에서 중요한 5가지 핵심 항목과 기술을 아래 목록으로 정리해줘
+1. 실행 및 검증 샌드박스 (Execution Sandbox)
+코딩 에이전트가 생성한 코드를 즉시 실행하고 결과를 확인할 수 있는 격리된 환경입니다.
+중요성: 모델이 짠 코드가 문법적으로 맞는지, 실제 의도대로 동작하는지 '런타임 피드백'을 제공합니다.
+핵심 기술:
+E2B / Piston: 보안이 보장된 클라우드 기반 코드 인터프리터 환경.
+Docker/K8s Containers: 로컬이나 서버에서 독립된 실행 환경을 동적으로 생성.
+WASM (WebAssembly): 브라우저 내에서 안전하게 코드를 실행할 때 사용.
+2. LSP (Language Server Protocol) 기반 정적 분석
+에이전트가 코드를 작성하는 동안 실시간으로 코드의 구조를 파악하게 돕는 기술입니다.
+중요성: 파일 간의 참조 관계(정의 이동, 타입 체크)를 모델이 정확히 이해하게 하여 환각(Hallucination)을 줄입니다.
+핵심 기술:
+LSP: VS Code처럼 심볼 찾기, 에러 하이라이팅 등을 AI에게 제공.
+Tree-sitter: 코드를 추상 구문 트리(AST)로 파악하여 특정 함수나 클래스 단위로 코드를 읽고 수정하게 함.
+3. MCP (Model Context Protocol) & 파일 시스템 컨텍스트
+수만 줄의 전체 코드베이스 중 현재 작업에 꼭 필요한 파일만 골라 모델에게 전달하는 "맥락 관리" 기술입니다.
+중요성: 모델의 컨텍스트 윈도우 한계를 극복하고, 관련 없는 코드로 인한 혼선을 방지합니다.
+핵심 기술:
+MCP: 앤스로픽이 제안한 표준으로, 에이전트가 로컬 파일이나 GitHub 저장소에 질서 있게 접근하게 함.
+Repo Map / Ctags: 전체 프로젝트 구조를 요약하여 모델이 '지형도'를 먼저 파악하게 함.
+BM25 / Vector Search: 질문과 관련된 코드 조각을 검색(RAG)하여 주입.
+4. 테스트 하네스 및 피드백 루프 (Test Harness & Self-Healing)
+에이전트가 코드를 짠 후 스스로 테스트를 돌리고, 에러가 나면 수정(Self-Correction)하는 구조입니다. 
+중요성: 사람의 개입 없이도 '돌아가는 코드'가 나올 때까지 반복 숙달시킵니다.
+핵심 기술:
+Pytest / Jest Integration: 테스트 프레임워크를 에이전트 도구(Tool)로 연결.
+Error Traceback Analysis: 에러 메시지를 다시 모델에 입력하여 수정 방안을 도출하는 루프 설계.
+5. 가드레일 및 보안 (Security Guardrails)
+에이전트가 위험한 명령어를 실행하거나 보안 취약점이 있는 코드를 생성하지 못하게 막는 방어막입니다.
+중요성: rm -rf / 같은 파괴적인 명령이나 API 키 유출 등을 방지합니다.
+핵심 기술:
+Semgrep / SonarQube: 생성된 코드의 보안 취약점을 실시간 스캔.
+Prompt Injection Defense: 시스템 프롬프트를 통해 도구 사용 권한을 엄격히 제한.
+요약하자면:
+코딩 에이전트 아키텍처는 [모델(뇌) - LSP(눈) - Sandbox(손) - Test/Linter(신경계)]가 유기적으로 연결된 형태여야 합니다.
+현재 커서(Cursor)나 윈드서프(Windsurf) 같은 상용 도구의 내부 구조를 참고 중이신가요, 아니면 오픈소스 기반(LangGraph 등)으로 직접 에이전트를 빌드 중이신가요? 상황에 맞는 구현 라이브러리를 추천해 드릴 수 있습니다.
+
+
+
+
+아키텍처 관점에서 중요한 5가지 핵심 항목과 기술을 아래 목록으로 정리해줘
+1. 실행 및 검증 샌드박스 (Execution Sandbox) 를코드 기반에서 분석해
+2. LSP (Language Server Protocol) 기반 정적 분석 를코드 기반에서 분석해
+3. MCP (Model Context Protocol) & 파일 시스템 컨텍스트 를코드 기반에서 분석해
+4. 테스트 하네스 및 피드백 루프 (Test Harness & Self-Healing) 를코드 기반에서 분석해
+5. 가드레일 및 보안 (Security Guardrails) 를코드 기반에서 분석해
+
+요약해서
+코딩 에이전트 아키텍처의 [모델(뇌) - LSP(눈) - Sandbox(손) - Test/Linter(신경계)]가 유기적으로 연결 상태를 코드 기반에서 분석해
+
+
+
+
