@@ -120,3 +120,32 @@ Welcome to Claude Code v2.1.88
 사용자가 로그인하고 서버가 DB에서 확인 후 토큰을 발행하는 과정을 Mermaid 시퀀스 다이어그램으로 그려줘
 
 
+==================================
+
+아래 기존 파일들 내 상단에 문서내 (기능, 프로세스 처리 과정을 Mermaid 시퀀스 다이어그램)으로 상세히 그려서 추가하여 업데이트해
+
+
+ARCHITECTURE-AGENT-kr.md
+ARCHITECTURE-AGENT.md
+ARCHITECTURE-DESIGN-kr.md
+ARCHITECTURE-DESIGN.md
+ARCHITECTURE-KEY-kr.md
+ARCHITECTURE-KEY.md
+ARCHITECTURE-MAINSTREAM-kr.md
+ARCHITECTURE-MAINSTREAM.md
+BRAIN-MODEL-ORCHESTRATION-CORE.md
+EYE-LSP-IDE-MCP-DIAGNOSTIC-PERCEPTION.md
+GENERAL-AGENT-DESIGN.md
+HAND-SANDBOX-CONTROLLED.md
+INTER-STREAM.md
+NERVOUS-CORRECTION.md
+
+
+
+
+
+
+
+
+
+
