@@ -109,3 +109,11 @@ npm error permissions of the file and its containing directories, or try running
 npm error the command again as root/Administrator
 
 
+claude
+Welcome to Claude Code v2.1.88
+
+ Unable to connect to Anthropic services
+
+ Failed to connect to api.anthropic.com: UNABLE_TO_VERIFY_LEAF_SIGNATURE
+
+
