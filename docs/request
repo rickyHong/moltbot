@@ -117,3 +117,6 @@ Welcome to Claude Code v2.1.88
  Failed to connect to api.anthropic.com: UNABLE_TO_VERIFY_LEAF_SIGNATURE
 
 
+사용자가 로그인하고 서버가 DB에서 확인 후 토큰을 발행하는 과정을 Mermaid 시퀀스 다이어그램으로 그려줘
+
+
