@@ -242,4 +242,7 @@ mqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 
   ? ?API Error: 400 {"type":"error","error":{"type":"BadRequestError","message":"\"auto\" tool choice requires                       --enable-auto-tool-choice and --tool-call-parser to be set"}}ude install` or see https://docs.anthropic.com/en/docs/clau…t
 
+==============================
 
+● There's an issue with the selected model (mai-ui-8b-v100-vllm). It may not exist or you may not have access todit. Run//model
+  to pick a different model.
