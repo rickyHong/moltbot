@@ -221,4 +221,25 @@ Welcome to Claude Code v2.1.88
 *  Simmering (1m 11s)
 
 
+=========================
+
+node ./bin/claude.js
+lqqq Claude Code v2.1.88 qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqk
+x                                             x Tips for getting started                                          x
+x                Welcome back!                x Run /init to create a CLAUDE.md file with instructions for Claude x
+x                                             x qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq x
+x                   ???????                   x Recent activity                                                   x
+x                  ?????????                  x No recent activity                                                x
+x                    ?? ??                    x                                                                   x
+x                                             x                                                                   x
+x   mai-ui-8b-v100-vllm · API Usage Billing   x                                                                   x
+x        ~/claude-code-source-ts-v.0.3        x                                                                   x
+mqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqj
+
+  ↑ Opus now defaults to 1M context · 5x more room, same pricing
+
+? hello
+
+  ? ?API Error: 400 {"type":"error","error":{"type":"BadRequestError","message":"\"auto\" tool choice requires                       --enable-auto-tool-choice and --tool-call-parser to be set"}}ude install` or see https://docs.anthropic.com/en/docs/clau…t
+
 
