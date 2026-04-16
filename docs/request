@@ -254,3 +254,4 @@ mqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq
 분석해라 (여기서 범용적인 Agent 라고하면, 인터넷 검색, 날씨 분석, 일반적인 지식 대화, 일반적인 챗봇대화 및 인터넷 정보를 포함하여 분석을 할수 있고, 환경내 제어 및 코드 작성 후 스킬로 추가하고    
 관리 및 메모리 관리를 포함하고, 해당 시스템 전체읠 실행도 할수 있어야 한다) 또한 현재 코드에서 code agent 외 기능을 막고 있는 Prompt 나 환경 제약이 있는지 확인해서 분석 보고해야 한다.  
 
+다시한번 성능향상 및 목표 수준향상을 위해 재설계하고 설계된 내용대로 완벽하게 재수정 완료하고 , 수정된 코드는 완벽하게 실행될수 있어야 한다.
