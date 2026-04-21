@@ -272,3 +272,22 @@ CUDA_VISIBLE_DEVICES=1,2 ./build/bin/llama-server \
   --host 0.0.0.0 \
   --port 6014 \
   --alias qwen3-coder-next
+
+
+
+
+# 1. Cloudflare GPG 키 추가
+sudo mkdir -p --mode=0755 /usr/share/keyrings
+curl -fsSL https://cloudflare.com | sudo tee /usr/share/keyrings/cloudflare-main.gpg >/dev/null
+
+# 2. 패키지 저장소 리스트 추가
+echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://cloudflare.com jammy main' | sudo tee /etc/apt/sources.list.d/cloudflared.list
+
+# 3. 패키지 목록 업데이트 및 설치
+sudo apt update
+sudo apt install cloudflared
+
+
+cloudflared tunnel --url http://localhost:3001
+
+
