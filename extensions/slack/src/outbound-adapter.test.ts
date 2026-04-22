@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const sendMessageSlackMock = vi.fn();
-const hasHooksMock = vi.fn();
-const runMessageSendingMock = vi.fn();
+const sendMessageSlackMock = vi.hoisted(() => vi.fn());
+const hasHooksMock = vi.hoisted(() => vi.fn());
+const runMessageSendingMock = vi.hoisted(() => vi.fn());
 
 vi.mock("./send.js", () => ({
   sendMessageSlack: (...args: unknown[]) => sendMessageSlackMock(...args),
@@ -15,7 +15,8 @@ vi.mock("openclaw/plugin-sdk/plugin-runtime", () => ({
   }),
 }));
 
-import { slackOutbound } from "./outbound-adapter.js";
+let slackOutbound: typeof import("./outbound-adapter.js").slackOutbound;
+({ slackOutbound } = await import("./outbound-adapter.js"));
 
 describe("slackOutbound", () => {
   const cfg = {
@@ -47,15 +48,13 @@ describe("slackOutbound", () => {
       payload: {
         text: "final text",
         mediaUrls: ["https://example.com/1.png", "https://example.com/2.png"],
-        channelData: {
-          slack: {
-            blocks: [
-              {
-                type: "section",
-                text: { type: "plain_text", text: "Block body" },
-              },
-            ],
-          },
+        presentation: {
+          blocks: [
+            {
+              type: "text",
+              text: "Block body",
+            },
+          ],
         },
       },
       mediaLocalRoots: ["/tmp/workspace"],
@@ -92,12 +91,41 @@ describe("slackOutbound", () => {
         blocks: [
           {
             type: "section",
-            text: { type: "plain_text", text: "Block body" },
+            text: { type: "mrkdwn", text: "Block body" },
           },
         ],
       }),
     );
     expect(result).toEqual({ channel: "slack", messageId: "m-final" });
+  });
+
+  it("renders channelData Slack blocks on payload sends", async () => {
+    sendMessageSlackMock.mockResolvedValueOnce({ messageId: "m-blocks" });
+
+    const result = await slackOutbound.sendPayload!({
+      cfg,
+      to: "C123",
+      text: "",
+      payload: {
+        text: "fallback text",
+        channelData: {
+          slack: {
+            blocks: [{ type: "divider" }],
+          },
+        },
+      },
+      accountId: "default",
+    });
+
+    expect(sendMessageSlackMock).toHaveBeenCalledWith(
+      "C123",
+      "fallback text",
+      expect.objectContaining({
+        cfg,
+        blocks: [{ type: "divider" }],
+      }),
+    );
+    expect(result).toEqual({ channel: "slack", messageId: "m-blocks" });
   });
 
   it("cancels sendMedia when message_sending hooks block it", async () => {

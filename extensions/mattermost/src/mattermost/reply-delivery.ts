@@ -1,9 +1,14 @@
 import {
   deliverTextOrMediaReply,
+  isReasoningReplyPayload,
   resolveSendableOutboundReplyParts,
 } from "openclaw/plugin-sdk/reply-payload";
-import type { OpenClawConfig, PluginRuntime, ReplyPayload } from "../runtime-api.js";
-import { getAgentScopedMediaLocalRoots } from "../runtime-api.js";
+import {
+  getAgentScopedMediaLocalRoots,
+  type OpenClawConfig,
+  type PluginRuntime,
+  type ReplyPayload,
+} from "./runtime-api.js";
 
 type MarkdownTableMode = Parameters<PluginRuntime["channel"]["text"]["convertMarkdownTables"]>[1];
 
@@ -11,6 +16,7 @@ type SendMattermostMessage = (
   to: string,
   text: string,
   opts: {
+    cfg: OpenClawConfig;
     accountId?: string;
     mediaUrl?: string;
     mediaLocalRoots?: readonly string[];
@@ -30,6 +36,9 @@ export async function deliverMattermostReplyPayload(params: {
   tableMode: MarkdownTableMode;
   sendMessage: SendMattermostMessage;
 }): Promise<void> {
+  if (isReasoningReplyPayload(params.payload)) {
+    return;
+  }
   const reply = resolveSendableOutboundReplyParts(params.payload, {
     text: params.core.channel.text.convertMarkdownTables(
       params.payload.text ?? "",
@@ -49,12 +58,14 @@ export async function deliverMattermostReplyPayload(params: {
       params.core.channel.text.chunkMarkdownTextWithMode(value, params.textLimit, chunkMode),
     sendText: async (chunk) => {
       await params.sendMessage(params.to, chunk, {
+        cfg: params.cfg,
         accountId: params.accountId,
         replyToId: params.replyToId,
       });
     },
     sendMedia: async ({ mediaUrl, caption }) => {
       await params.sendMessage(params.to, caption ?? "", {
+        cfg: params.cfg,
         accountId: params.accountId,
         mediaUrl,
         mediaLocalRoots,

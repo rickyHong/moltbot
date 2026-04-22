@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { appendFileSync } from "node:fs";
 
-/** @typedef {{ runNode: boolean; runMacos: boolean; runAndroid: boolean; runWindows: boolean; runSkillsPython: boolean; runChangedSmoke: boolean }} ChangedScope */
+/** @typedef {{ runNode: boolean; runMacos: boolean; runAndroid: boolean; runWindows: boolean; runSkillsPython: boolean; runChangedSmoke: boolean; runControlUiI18n: boolean }} ChangedScope */
 
 const DOCS_PATH_RE = /^(docs\/|.*\.mdx?$)/;
 const SKILLS_PYTHON_SCOPE_RE = /^(skills\/|pyproject\.toml$)/;
@@ -9,14 +9,17 @@ const CI_WORKFLOW_SCOPE_RE = /^\.github\/workflows\/ci\.yml$/;
 const INSTALL_SMOKE_WORKFLOW_SCOPE_RE = /^\.github\/workflows\/install-smoke\.yml$/;
 const MACOS_PROTOCOL_GEN_RE =
   /^(apps\/macos\/Sources\/OpenClawProtocol\/|apps\/shared\/OpenClawKit\/Sources\/OpenClawProtocol\/)/;
-const MACOS_NATIVE_RE = /^(apps\/macos\/|apps\/ios\/|apps\/shared\/|Swabble\/)/;
+const MACOS_NATIVE_RE =
+  /^(apps\/macos\/|apps\/macos-mlx-tts\/|apps\/ios\/|apps\/shared\/|Swabble\/)/;
 const ANDROID_NATIVE_RE = /^(apps\/android\/|apps\/shared\/)/;
 const NODE_SCOPE_RE =
   /^(src\/|test\/|extensions\/|packages\/|scripts\/|ui\/|\.github\/|openclaw\.mjs$|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|tsconfig.*\.json$|vitest.*\.ts$|tsdown\.config\.ts$|\.oxlintrc\.json$|\.oxfmtrc\.jsonc$)/;
 const WINDOWS_SCOPE_RE =
   /^(src\/|test\/|extensions\/|packages\/|scripts\/|ui\/|openclaw\.mjs$|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|tsconfig.*\.json$|vitest.*\.ts$|tsdown\.config\.ts$|\.github\/workflows\/ci\.yml$|\.github\/actions\/setup-node-env\/action\.yml$|\.github\/actions\/setup-pnpm-store-cache\/action\.yml$)/;
+const CONTROL_UI_I18N_SCOPE_RE =
+  /^(ui\/src\/i18n\/|scripts\/control-ui-i18n\.ts$|\.github\/workflows\/control-ui-locale-refresh\.yml$)/;
 const NATIVE_ONLY_RE =
-  /^(apps\/android\/|apps\/ios\/|apps\/macos\/|apps\/shared\/|Swabble\/|appcast\.xml$)/;
+  /^(apps\/android\/|apps\/ios\/|apps\/macos\/|apps\/macos-mlx-tts\/|apps\/shared\/|Swabble\/|appcast\.xml$)/;
 const CHANGED_SMOKE_SCOPE_RE =
   /^(Dockerfile$|\.npmrc$|package\.json$|pnpm-lock\.yaml$|pnpm-workspace\.yaml$|scripts\/install\.sh$|scripts\/test-install-sh-docker\.sh$|scripts\/docker\/|extensions\/[^/]+\/package\.json$|\.github\/workflows\/install-smoke\.yml$|\.github\/actions\/setup-node-env\/action\.yml$)/;
 
@@ -33,6 +36,7 @@ export function detectChangedScope(changedPaths) {
       runWindows: true,
       runSkillsPython: true,
       runChangedSmoke: true,
+      runControlUiI18n: true,
     };
   }
 
@@ -42,11 +46,12 @@ export function detectChangedScope(changedPaths) {
   let runWindows = false;
   let runSkillsPython = false;
   let runChangedSmoke = false;
+  let runControlUiI18n = false;
   let hasNonDocs = false;
   let hasNonNativeNonDocs = false;
 
   for (const rawPath of changedPaths) {
-    const path = String(rawPath).trim();
+    const path = rawPath.trim();
     if (!path) {
       continue;
     }
@@ -91,6 +96,10 @@ export function detectChangedScope(changedPaths) {
       runChangedSmoke = true;
     }
 
+    if (CONTROL_UI_I18N_SCOPE_RE.test(path)) {
+      runControlUiI18n = true;
+    }
+
     if (!NATIVE_ONLY_RE.test(path)) {
       hasNonNativeNonDocs = true;
     }
@@ -100,7 +109,15 @@ export function detectChangedScope(changedPaths) {
     runNode = true;
   }
 
-  return { runNode, runMacos, runAndroid, runWindows, runSkillsPython, runChangedSmoke };
+  return {
+    runNode,
+    runMacos,
+    runAndroid,
+    runWindows,
+    runSkillsPython,
+    runChangedSmoke,
+    runControlUiI18n,
+  };
 }
 
 /**
@@ -136,6 +153,7 @@ export function writeGitHubOutput(scope, outputPath = process.env.GITHUB_OUTPUT)
   appendFileSync(outputPath, `run_windows=${scope.runWindows}\n`, "utf8");
   appendFileSync(outputPath, `run_skills_python=${scope.runSkillsPython}\n`, "utf8");
   appendFileSync(outputPath, `run_changed_smoke=${scope.runChangedSmoke}\n`, "utf8");
+  appendFileSync(outputPath, `run_control_ui_i18n=${scope.runControlUiI18n}\n`, "utf8");
 }
 
 function isDirectRun() {
@@ -172,6 +190,7 @@ if (isDirectRun()) {
         runWindows: true,
         runSkillsPython: true,
         runChangedSmoke: true,
+        runControlUiI18n: true,
       });
       process.exit(0);
     }
@@ -184,6 +203,7 @@ if (isDirectRun()) {
       runWindows: true,
       runSkillsPython: true,
       runChangedSmoke: true,
+      runControlUiI18n: true,
     });
   }
 }
